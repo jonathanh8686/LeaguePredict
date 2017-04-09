@@ -11,20 +11,18 @@ namespace LeaguePredict
         /// <returns>ID's of people >lvl30</returns>
         private static List<string> GetUserIDs(int min = 50000000, int max = 57467600)
         {
-
+            string apiKey = "";
             List<string> eligUsers = new List<string>();
             WebClient wc = new WebClient();
             string testIDS = "";
             for (int i = min; i < max; i++)
             {
+                testIDS = testIDS.TrimEnd(',');
                 testIDS += i + ",";
-                if ((i - min) % 40 == 0)
-                {
-                    string getstr =
-                        "https://na.api.riotgames.com/api/lol/NA/v1.4/summoner/1,2,3,4,5?api_key=RGAPI-c99bc9fd-b46d-4fd6-80cf-2f334376d691";
-                    string rawdata = wc.DownloadString("");
-                    testIDS = "";
-                }
+                if ((i - min) % 40 != 0) continue;
+
+                string getstr = "https://na.api.riotgames.com/api/lol/NA/v1.4/summoner/" + testIDS + "?api_key=" + apiKey;
+                string rawdata = wc.DownloadString(getstr);
             }
             return eligUsers;
         }
