@@ -7,7 +7,7 @@ namespace LeaguePredict
 {
     static class GetRawGames
     {
-        static string apiKey = "RGAPI-c99bc9fd-b46d-4fd6-80cf-2f334376d691";
+        static string apiKey = "";
 
         /// <summary>
         /// Returns the recent games data from Riot
