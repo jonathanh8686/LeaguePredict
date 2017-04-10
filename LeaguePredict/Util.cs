@@ -32,8 +32,11 @@ namespace LeaguePredict
             data = data.Replace("\r", "");
             string pattern = begin + ".*?" + end;
             pattern = pattern.Replace("(", "\\(");
-            MatchCollection matches = Regex.Matches(data, pattern);
-            return (from Match nextOne in matches select nextOne.Value into strTemp select GetMiddle(strTemp, begin, end).Replace("&amp; ", "")).ToList();
+            var matches = Regex.Matches(data, pattern);
+            return (from Match nextOne in matches
+                select nextOne.Value
+                into strTemp
+                select GetMiddle(strTemp, begin, end).Replace("&amp; ", "")).ToList();
         }
     }
 }
