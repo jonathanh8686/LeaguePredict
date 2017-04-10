@@ -29,15 +29,14 @@ namespace LeaguePredict
         {
             List<string> eligUsers = new List<string>();
             WebClient wc = new WebClient();
-            string testIds = "";
+            string getIds = "";
             for (int i = min; i < max; i++)
             {
-
-                testIds += i + ",";
+                getIds += i + ",";
                 if ((i - min) % 40 != 0 || i == min) continue;
 
-                testIds = testIds.TrimEnd(',');
-                string getstr = "https://na.api.riotgames.com/api/lol/NA/v1.4/summoner/" + testIds + "?api_key=" + apiKey;
+                getIds = getIds.TrimEnd(',');
+                string getstr = "https://na.api.riotgames.com/api/lol/NA/v1.4/summoner/" + getIds + "?api_key=" + apiKey;
                 string rawdata;
                 try
                 {
@@ -54,7 +53,7 @@ namespace LeaguePredict
                 for (int j = 0; j < levels.Count; j++)
                     if (levels[j] == 30)
                         eligUsers.Add(ids[j]);
-                testIds = "";
+                getIds = "";
             }
             return eligUsers;
         }
