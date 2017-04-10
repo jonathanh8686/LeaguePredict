@@ -11,7 +11,6 @@ namespace LeaguePredict
     {
         public string PlayerId;
         public int ChampId;
-        public string Team;
     }
 
     static class ProcessMatch
@@ -31,29 +30,45 @@ namespace LeaguePredict
             {
                 var gameData = gamesData[i];
 
-                // All of data about the players is stored
+                // All of data about the players is stored (except for the original)
                 var playerData = gameData["fellowPlayers"];
-                List<PlayerStruct> playersIg = new List<PlayerStruct>();
+                List<PlayerStruct> redTeam = new List<PlayerStruct>();
+                List<PlayerStruct> blueTeam = new List<PlayerStruct>();
 
                 for (int j = 0; j < playerData.Count(); j++)
                 {
-                    // Put all players into playersIg using the PlayerStruct
+                    // Put all players into Blue/Red teams using the PlayerStruct
                     PlayerStruct pcp = new PlayerStruct
                     {
-                        ChampId = (int) playerData["championId"],
-                        PlayerId = playerData["summonerId"].ToString(),
-                        Team = playerData["teamId"].ToString() == "100" ? "blue" : "red"
+                        ChampId = (int) playerData[j]["championId"],
+                        PlayerId = playerData[j]["summonerId"].ToString(),
                     };
-                    playersIg.Add(pcp);
+
+                    if (playerData[j]["teamId"].ToString() == "100")
+                        blueTeam.Add(pcp);
+                    else if (playerData[j]["teamId"].ToString() == "200")
+                        redTeam.Add(pcp);
                 }
+
+                // Add the original player back, "fellowPlayers" does not contain it
+                PlayerStruct oripcp = new PlayerStruct
+                {
+                    ChampId = (int) gameData["championId"],
+                    PlayerId = matchJson["summonerId"].ToString()
+                };
+
+                if(gameData["teamId"].ToString() == "100")
+                    blueTeam.Add(oripcp);
+                else if(gameData["teamId"].ToString() == "200")
+                    redTeam.Add(oripcp);
 
                 LeagueMatch tmpMatch = new LeagueMatch
                 {
                     GameId = gameData["gameId"].ToString(),
                     StartDate = (long) gameData["createDate"],
                     GameType = gameData["subType"].ToString(),
-                    PlayerChampions = playersIg
-                    
+                    BlueTeam = blueTeam,
+                    RedTeam = redTeam
                 };
 
                 rtnMatches.Add(tmpMatch);

@@ -17,8 +17,7 @@ namespace LeaguePredict
         public static string GetRecentGames(string playerId)
         {
             string getstr = "https://na.api.riotgames.com/api/lol/NA/v1.3/game/by-summoner/" + playerId + "/recent?api_key=" + apiKey;
-            WebClient wc = new WebClient();
-            return wc.DownloadString(getstr);
+            return new WebClient().DownloadString(getstr);
         }
 
         /// <summary>
